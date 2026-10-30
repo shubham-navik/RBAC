@@ -5,6 +5,8 @@ from fastapi import FastAPI
 from backend.app.api.v1.health import router as health_router
 from backend.app.core.config import settings
 from backend.app.core.redis import close_redis
+from backend.app.api.v1.auth import router as auth_router
+from backend.app.api.v1.protected import router as protected_router
 
 
 @asynccontextmanager
@@ -23,6 +25,15 @@ app = FastAPI(
 
 app.include_router(
     health_router,
+    prefix=settings.API_V1_PREFIX,
+)
+app.include_router(
+    auth_router,
+    prefix=settings.API_V1_PREFIX,
+)
+
+app.include_router(
+    protected_router,
     prefix=settings.API_V1_PREFIX,
 )
 
