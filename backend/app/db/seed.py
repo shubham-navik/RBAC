@@ -11,6 +11,7 @@ DEFAULT_PERMISSIONS = [
     ("users:delete", "users", "delete"),
     ("roles:create", "roles", "create"),
     ("roles:read", "roles", "read"),
+    ("roles:assign", "roles", "assign"),
     ("roles:update", "roles", "update"),
     ("roles:delete", "roles", "delete"),
     ("permissions:create", "permissions", "create"),
@@ -42,8 +43,11 @@ async def seed_permissions(db: AsyncSession) -> None:
 async def seed_roles(db: AsyncSession) -> None:
     default_roles = {
         "Admin": "Full system access",
-        "Manager": "Manage users and projects",
-        "Employee": "Basic project access",
+        "HR": "Human Resources access",
+        "HR_HEAD": "Human Resources Head access",
+        "MANAGER": "Department Manager access",
+        "HOD": "Head of Department access",
+        "EMPLOYEE": "Basic employee access",
     }
 
     for name, description in default_roles.items():
@@ -73,15 +77,31 @@ async def assign_default_permissions(db: AsyncSession) -> None:
 
     role_permissions = {
         "Admin": list(permission_map.keys()),
-        "Manager": [
+        "HR": [
             "users:read",
+            "users:create",
+            "projects:read",
+        ],
+        "HR_HEAD": [
+            "users:read",
+            "users:create",
             "users:update",
-            "projects:create",
             "projects:read",
             "projects:update",
-            "projects:delete",
         ],
-        "Employee": [
+        "MANAGER": [
+            "users:read",
+            "users:update",
+            "projects:read",
+            "projects:update",
+        ],
+        "HOD": [
+            "users:read",
+            "users:update",
+            "projects:read",
+            "projects:update",
+        ],
+        "EMPLOYEE": [
             "projects:read",
         ],
     }
